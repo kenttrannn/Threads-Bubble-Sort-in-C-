@@ -1,6 +1,6 @@
 // Author: Kent Tran
-// CECS 325-02 Prog 3
-// Due Date: 3/5/2026
+// CECS 325-02 Prog 4
+// Due Date: 4/14/2026
 //
 // I certify that this program is my own original work. I did not copy any part of this program from
 // any other source including inappropriate AI use. I did not share this program with anyone. I
@@ -16,25 +16,20 @@ using namespace std;
 
 //create a global variable which will keep track of all the swaps that take place
 long long totalSwaps = 0;
-mutex swapMutex;
+mutex mutexSwap;
 
 struct ThreadData
 {
     int* arr;
     int size;
-    int processNum;
+    string processNum;
 };
-
-void printMessage(string quote, int threadNum)
-{
-    cout << "thread:" << threadNum << " " << quote << endl;
-}
 
 void bubble(ThreadData* data)
 {
     int* arr = data->arr;
     int n = data->size;
-    int pNum = data->processNum;
+    string pNum = data->processNum;
     long long localSwaps = 0;
 
     for (int i = 0; i < n - 1; i++)
@@ -51,29 +46,67 @@ void bubble(ThreadData* data)
         }
     }
 
-    cout << "Process " << pNum << "swap count:" << localSwaps << endl;
+    cout << pNum << " swap count:" << localSwaps << endl;
 
-    swapMutex.lock();
+    /* lock the thread to allow only the current thread to run until unlocked
+    prevents it from being accessed by multiple threads
+    */
+    mutexSwap.lock();
     totalSwaps += localSwaps;
-    swapMutex.unlock();
+    mutexSwap.unlock();
 }
 
 //merge 2 adjacent sections into a sorted super section
 void merge(int* arr, int leftSide, int rightSide)
 {
     int totalSize = leftSide + rightSide;
-    int* temp = new int[totalSize];
+    int n = leftSide;
+    int m = rightSide;
+    int i = 0, j = 0, k = 0;
+    int* merged = new int[totalSize];
 
-    int i = 0;
-    int j = leftSide;
-    int k = 0;
+    while(i < n && j < m)
+    {
+        if(arr[i] <= arr[j])
+        {
+            merged[k] = arr[i];
+            i++;
+        }
+        else
+        {
+            merged[k] = arr[n + j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n)
+    {
+        merged[k] = arr[i];
+        i++;
+        k++;
+    }
+
+    while (j < m)
+    {
+        merged[k] = arr[j];
+        j++;
+        k++;
+    }
+
+    for(int x = 0; x < totalSize; x++)
+    {
+        arr[x] = merged[x];
+    }
+
+    delete[] merged;
 }
 
 int main(int argc, char* argv[])
 {
-    if (argc != 4)
+    if (argc < 3)
     {
-        cerr << "Error: Usage: mysort inputfile outputfile -test" << endl;
+        cerr << "Error: Usage: mysort inputfile outputfile [-test]" << endl;
         return 1;
     }
 
@@ -84,7 +117,11 @@ int main(int argc, char* argv[])
     }
 
     //lambda expression, can write this in a if loop instead
-    int totalNum = test ? 10000 : 1000000;
+    int totalNum = 1000000;
+    if(test)
+    {
+        totalNum = 10000;
+    }
 
     ifstream inFile(argv[1]);
     if (!inFile)
@@ -95,24 +132,61 @@ int main(int argc, char* argv[])
 
     int* num = new int[totalNum];
 
-    while (inFile >> num)
+    int count = 0;
+    while(count < totalNum && inFile >> num[count])
     {
-        
+        count++;
     }
     inFile.close();
 
-    bubble(nums);
+    int NUM_THREADS = 16;
+    int sectionSize = count / NUM_THREADS;
+
+    thread* threads = new thread[NUM_THREADS];
+    ThreadData* threadData = new ThreadData[NUM_THREADS];
+
+    for(int i = 0; i < NUM_THREADS; i++)
+    {
+        threadData[i].arr = num + (i * sectionSize);
+        threadData[i].size = sectionSize;
+        threadData[i].processNum = "Process " + to_string(i);
+        threads[i] = thread(bubble, &threadData[i]);
+    }
+
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        threads[i].join();
+    }
+
+    cout << "Total Swaps: " << totalSwaps << endl;
+
+    delete[] threads;
+    delete[] threadData;
+
+    int currentSize = sectionSize;
+    int currentSection = NUM_THREADS;
+
+    while (currentSection > 1)
+    {
+        for (int i = 0; i < currentSection; i += 2)
+        {
+            merge(num + (i * currentSize), currentSize, currentSize);
+        }
+        currentSize *= 2;
+        currentSection /= 2;
+    }
 
     ofstream outFile(argv[2]);
     if(!outFile)
     {
         cerr << "Error: Could not open output file: " << argv[2] << endl;
+        delete[] num;
         return 1;
     }
 
-    for (int i = 0; i < (int)numbers.size(); i++)
+    for (int i = 0; i < count; i++)
     {
-        outFile << numbers[i] << "\n";
+        outFile << num[i] << endl;
     }
     outFile.close();
 
