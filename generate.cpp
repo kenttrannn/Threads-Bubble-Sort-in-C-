@@ -15,11 +15,6 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    for (int i = 0; i < argc; i++)
-    {
-        cout << "argv[" << i << "]" << argv[i] << endl;
-    }
-
     if (argc != 4)
     {
         cerr << "Error: Usage: generate COUNT MIN MAX" << endl;

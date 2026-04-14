@@ -1,43 +1,39 @@
 =======Start=======
 kenttran
-Tue Apr 14 05:30:52 PDT 2026
+Tue Apr 14 05:54:12 PDT 2026
 My machine has this many processors
 8
 Generating 1000000 random numbers
-argv[0]./generate
-argv[1]1000000
-argv[2]-1000000
-argv[3]1000000
 Starting system sort
 
-real	0m2.230s
-user	0m2.104s
-sys	0m0.099s
+real	0m2.122s
+user	0m2.037s
+sys	0m0.072s
 Starting my sort
-Process 1 swap count: 975051013
-Process 12 swap count: 975983783
-Process 0 swap count: 974560244
-Process 2 swap count: 980576122
-Process 14 swap count: 978439173
-Process 3 swap count: 978870195
-Process 8 swap count: 975323438
-Process 5 swap count: 974432683
-Process 10 swap count: 977216695
-Process 7 swap count: 977236436
-Process 15 swap count: 977375079
-Process 9 swap count: 975660929
-Process 4 swap count: 975134479
-Process 6 swap count: 978975751
-Process 11 swap count: 976243009
-Process 13 swap count: 977011427
-Total Swaps: 15628090456
+Process 13 swap count: 973969441
+Process 8 swap count: 972401250
+Process 2 swap count: 976233329
+Process 7 swap count: 976100944
+Process 4 swap count: 977297502
+Process 15 swap count: 977839095
+Process 0 swap count: 975127214
+Process 10 swap count: 978661754
+Process 14 swap count: 980875306
+Process 5 swap count: 976398859
+Process 9 swap count: 975623944
+Process 3 swap count: 977500554
+Process 12 swap count: 977436975
+Process 1 swap count: 977096076
+Process 11 swap count: 982282707
+Process 6 swap count: 981313417
+Total Swaps: 15636158367
 
-real	0m59.176s
-user	5m58.577s
-sys	0m8.139s
--rw-r--r--  1 kenttran  staff  7389322 Apr 14 05:30 systemsort.out
--rw-r--r--@ 1 kenttran  staff  7389322 Apr 14 05:31 mysort.out
+real	0m59.104s
+user	5m48.443s
+sys	0m8.413s
+-rw-r--r--  1 kenttran  staff  7388718 Apr 14 05:54 systemsort.out
+-rw-r--r--@ 1 kenttran  staff  7388718 Apr 14 05:55 mysort.out
 Comparing systemsort.out to mysort.out
 All done with diff compare
 =======End=======
-Tue Apr 14 05:32:00 PDT 2026
+Tue Apr 14 05:55:20 PDT 2026

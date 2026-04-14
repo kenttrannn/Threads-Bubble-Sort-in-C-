@@ -19,18 +19,8 @@ long long totalSwaps = 0;
 mutex mutexSwap;
 mutex mutexPrint;
 
-struct ThreadData
+void bubble(int* arr, int n, string pNum)
 {
-    int* arr;
-    int size;
-    string processNum;
-};
-
-void bubble(ThreadData* data)
-{
-    int* arr = data->arr;
-    int n = data->size;
-    string pNum = data->processNum;
     long long localSwaps = 0;
 
     for (int i = 0; i < n - 1; i++)
@@ -107,19 +97,26 @@ void merge(int* arr, int leftSide, int rightSide)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 3)
+    if (argc != 3 && argc != 4)
     {
         cerr << "Error: Usage: mysort inputfile outputfile [-test]" << endl;
         return 1;
     }
 
     bool test = false;
-    if(argc == 4 && string(argv[3]) == "-test")
+    if(argc == 4)
     {
-        test = true;
+        if (string(argv[3]) == "-test")
+        {
+            test = true;
+        }
+        else
+        {
+            cerr << "Error: Usage: mysort inputfile outputfile [-test]" << endl;
+        }
     }
 
-    //lambda expression, can write this in a if loop instead
+    //changes totalNum to 10k if it's in test mode
     int totalNum = 1000000;
     if(test)
     {
@@ -146,14 +143,11 @@ int main(int argc, char* argv[])
     int sectionSize = count / NUM_THREADS;
 
     thread* threads = new thread[NUM_THREADS];
-    ThreadData* threadData = new ThreadData[NUM_THREADS];
 
     for(int i = 0; i < NUM_THREADS; i++)
     {
-        threadData[i].arr = num + (i * sectionSize);
-        threadData[i].size = sectionSize;
-        threadData[i].processNum = "Process " + to_string(i);
-        threads[i] = thread(bubble, &threadData[i]);
+        threads[i] = thread(bubble, num + (i * sectionSize), 
+                            sectionSize, "Process " + to_string(i));
     }
 
     for (int i = 0; i < NUM_THREADS; i++)
@@ -164,7 +158,6 @@ int main(int argc, char* argv[])
     cout << "Total Swaps: " << totalSwaps << endl;
 
     delete[] threads;
-    delete[] threadData;
 
     int currentSize = sectionSize;
     int currentSection = NUM_THREADS;
