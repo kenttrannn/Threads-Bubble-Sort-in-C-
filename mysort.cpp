@@ -17,6 +17,7 @@ using namespace std;
 //create a global variable which will keep track of all the swaps that take place
 long long totalSwaps = 0;
 mutex mutexSwap;
+mutex mutexPrint;
 
 struct ThreadData
 {
@@ -46,7 +47,9 @@ void bubble(ThreadData* data)
         }
     }
 
-    cout << pNum << " swap count:" << localSwaps << endl;
+    mutexPrint.lock();
+    cout << pNum << " swap count: " << localSwaps << endl;
+    mutexPrint.unlock();
 
     /* lock the thread to allow only the current thread to run until unlocked
     prevents it from being accessed by multiple threads
@@ -67,7 +70,7 @@ void merge(int* arr, int leftSide, int rightSide)
 
     while(i < n && j < m)
     {
-        if(arr[i] <= arr[j])
+        if(arr[i] <= arr[n + j])
         {
             merged[k] = arr[i];
             i++;
@@ -89,7 +92,7 @@ void merge(int* arr, int leftSide, int rightSide)
 
     while (j < m)
     {
-        merged[k] = arr[j];
+        merged[k] = arr[n + j];
         j++;
         k++;
     }

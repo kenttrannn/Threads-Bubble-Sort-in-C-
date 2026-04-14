@@ -1,0 +1,43 @@
+=======Start=======
+kenttran
+Tue Apr 14 05:30:52 PDT 2026
+My machine has this many processors
+8
+Generating 1000000 random numbers
+argv[0]./generate
+argv[1]1000000
+argv[2]-1000000
+argv[3]1000000
+Starting system sort
+
+real	0m2.230s
+user	0m2.104s
+sys	0m0.099s
+Starting my sort
+Process 1 swap count: 975051013
+Process 12 swap count: 975983783
+Process 0 swap count: 974560244
+Process 2 swap count: 980576122
+Process 14 swap count: 978439173
+Process 3 swap count: 978870195
+Process 8 swap count: 975323438
+Process 5 swap count: 974432683
+Process 10 swap count: 977216695
+Process 7 swap count: 977236436
+Process 15 swap count: 977375079
+Process 9 swap count: 975660929
+Process 4 swap count: 975134479
+Process 6 swap count: 978975751
+Process 11 swap count: 976243009
+Process 13 swap count: 977011427
+Total Swaps: 15628090456
+
+real	0m59.176s
+user	5m58.577s
+sys	0m8.139s
+-rw-r--r--  1 kenttran  staff  7389322 Apr 14 05:30 systemsort.out
+-rw-r--r--@ 1 kenttran  staff  7389322 Apr 14 05:31 mysort.out
+Comparing systemsort.out to mysort.out
+All done with diff compare
+=======End=======
+Tue Apr 14 05:32:00 PDT 2026

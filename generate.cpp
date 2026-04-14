@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     {
         outFile << (rand() % range) + minVal << "\n";
 
-        outFile.close();
-        return 0;
     }
+    outFile.close();
+    return 0;
 }
